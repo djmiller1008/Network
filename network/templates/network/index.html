@@ -1,5 +1,26 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
-{% endblock %}
+    <div id="all-posts">
+        <h1>All Posts</h1>
+        <div class="content-container">
+            <form class="form-group" action="{% url 'index' %}" method="post">
+                {% csrf_token %}
+                <label>New Post</label>
+                <textarea name="post-content" class="form-control"></textarea>
+                <input type="submit" class="btn btn-primary button-space" value="Post">
+            </form>
+            <div class="all-posts-container">
+                {% for post in posts %} 
+                    <div class="single-post">
+                        <span class="username-display">{{ post.user }}</span>
+                        <section class="post-content-display">{{ post.content }}</section>
+                        <span class="timestamp-display">{{ post.timestamp }}</span>
+                    </div>
+                {% endfor %} 
+    
+            </div>
+        </div>
+        
+    </div>
+{% endblock %} 
