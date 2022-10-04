@@ -1,0 +1,24 @@
+.content-container {
+    margin: 1rem;
+}
+
+.single-post {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gainsboro;
+    padding: 1rem;
+}
+
+.username-display {
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.timestamp-display {
+    font-size: .8rem;
+    opacity: .75;
+}
+
+.button-space {
+    margin-top: .5rem;
+}
