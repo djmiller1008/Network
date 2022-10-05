@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, UserFollower
 
 
 
@@ -21,6 +21,27 @@ def index(request):
         "posts": posts
     })
 
+def profile(request, username):
+    follow_button = False
+    following_status = "Follow"
+    profile_user = User.objects.get(username=username)
+    requesting_user = request.user
+    if requesting_user != profile_user:
+        follow_button = True
+        if UserFollower.objects.filter(user=profile_user, follower=requesting_user).count() == 1:
+            following_status = "Unfollow"
+
+    followers = profile_user.followers.count()
+    return render(request, "network/profile.html", {
+        "profile_user": profile_user,
+        "user": requesting_user,
+        "follow_button": follow_button,
+        "followers": followers,
+        "following_status": following_status
+    })
+
+def toggle_follow(request):
+    pass
 
 def login_view(request):
     if request.method == "POST":
