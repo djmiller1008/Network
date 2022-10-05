@@ -1,0 +1,15 @@
+{% extends 'network/layout.html' %} 
+
+
+{% block body %} 
+    <div class="profile-container">
+        <h1>{{ profile_user.username }}'s Profile</h1>
+        {% if follow_button %} 
+            <form action="{% url 'toggle_follow' %}" method="PUT">
+                <input type="submit" value='{{ following_status }}'>
+            </form>
+        {% endif %} 
+        <span>Followers: {{ followers }}</span>
+    </div>
+
+{% endblock %} 
