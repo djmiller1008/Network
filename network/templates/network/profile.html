@@ -5,7 +5,10 @@
     <div class="profile-container">
         <h1>{{ profile_user.username }}'s Profile</h1>
         {% if follow_button %} 
-            <form action="{% url 'toggle_follow' %}" method="PUT">
+            <form action="{% url 'toggle_follow' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="profile_user" value="{{ profile_user }}">
+                <input type="hidden" name="following_status" value="{{ following_status }}">
                 <input type="submit" value='{{ following_status }}'>
             </form>
         {% endif %} 
