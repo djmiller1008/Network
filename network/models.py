@@ -14,7 +14,7 @@ class Post(models.Model):
     likes = models.PositiveIntegerField(default=0)
 
 class UserFollower(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="folowee")
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followee")
     follower = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followers") 
     
 
