@@ -31,7 +31,7 @@ def profile(request, username):
         if UserFollower.objects.filter(user=profile_user, follower=requesting_user).count() == 1:
             following_status = "Unfollow"
 
-    followers = profile_user.followers.count()
+    followers = profile_user.followee.count()
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "user": requesting_user,
@@ -41,7 +41,17 @@ def profile(request, username):
     })
 
 def toggle_follow(request):
-    pass
+    profile_user = User.objects.get(username=request.POST["profile_user"])
+    if request.POST["following_status"] == "Unfollow":
+        object = UserFollower.objects.get(user=profile_user, follower=request.user)
+        object.delete()
+    else:
+        followerObject = UserFollower(user=profile_user, follower=request.user)
+        followerObject.save()
+
+    return HttpResponseRedirect(reverse("profile", kwargs={'username': profile_user.username}))
+        
+
 
 def login_view(request):
     if request.method == "POST":
