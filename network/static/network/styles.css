@@ -22,3 +22,12 @@
 .button-space {
     margin-top: .5rem;
 }
+
+.follower-count-section {
+    display: flex;
+
+}
+
+.follower-count-span {
+    margin-right: 1rem;
+}
