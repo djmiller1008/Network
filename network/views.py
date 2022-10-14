@@ -31,13 +31,26 @@ def profile(request, username):
         if UserFollower.objects.filter(user=profile_user, follower=requesting_user).count() == 1:
             following_status = "Unfollow"
 
-    followers = profile_user.followee.count()
+    followers = profile_user.followers.count()
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "user": requesting_user,
         "follow_button": follow_button,
         "followers": followers,
         "following_status": following_status
+    })
+
+def following(request):
+    posts = []
+    
+    following = request.user.following.all()
+    for user in following:
+        for post in user.user.posts.all():
+            posts.append(post)
+    
+    
+    return render(request, "network/following.html", {
+        "posts": posts
     })
 
 def toggle_follow(request):
