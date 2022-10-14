@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, UserFollower
 
@@ -21,10 +22,12 @@ def index(request):
         "posts": posts
     })
 
+@login_required(login_url='login')
 def profile(request, username):
     follow_button = False
     following_status = "Follow"
     profile_user = User.objects.get(username=username)
+    posts = profile_user.posts.all
     requesting_user = request.user
     if requesting_user != profile_user:
         follow_button = True
@@ -32,20 +35,24 @@ def profile(request, username):
             following_status = "Unfollow"
 
     followers = profile_user.followers.count()
+    following = profile_user.following.count()
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "user": requesting_user,
         "follow_button": follow_button,
         "followers": followers,
-        "following_status": following_status
+        "following_status": following_status,
+        "posts": posts,
+        "following": following
     })
 
+@login_required(login_url='login')
 def following(request):
     posts = []
     
     following = request.user.following.all()
     for user in following:
-        for post in user.user.posts.all():
+        for post in user.user.posts.all().order_by("-timestamp"):
             posts.append(post)
     
     
@@ -53,6 +60,7 @@ def following(request):
         "posts": posts
     })
 
+@login_required(login_url='login')
 def toggle_follow(request):
     profile_user = User.objects.get(username=request.POST["profile_user"])
     if request.POST["following_status"] == "Unfollow":
