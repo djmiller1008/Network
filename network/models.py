@@ -1,4 +1,5 @@
 from email.policy import default
+from tokenize import blank_re
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -14,9 +15,10 @@ class Post(models.Model):
     likes = models.PositiveIntegerField(default=0)
 
 class UserFollower(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followee")
-    follower = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followers") 
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followers")
+    follower = models.ForeignKey("User", on_delete=models.CASCADE, related_name="following") 
     
+
 
 
 
