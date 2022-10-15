@@ -31,3 +31,16 @@
 .follower-count-span {
     margin-right: 1rem;
 }
+
+
+.step-links {
+    display: flex;
+    justify-content: space-around;
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+}
+
+.top-layer {
+    display: flex;
+    justify-content: space-between;
+}
