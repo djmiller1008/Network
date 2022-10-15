@@ -2,7 +2,7 @@
 
 
 {% block body %} 
-    <div class="profile-container">
+    <div class="content-container">
         <h1>{{ profile_user.username }}'s Profile</h1>
         {% if follow_button %} 
             <form action="{% url 'toggle_follow' %}" method="post">
@@ -21,8 +21,14 @@
         <div class="all-posts-container">
             {% for post in posts %} 
                 <div class="single-post">
-                    <span class="username-display">{{ post.user }}</span>
-                    <section class="post-content-display">{{ post.content }}</section>
+                    <section class="top-layer">
+                        <span class="username-display">{{ post.user }}</span>
+                        {% if follow_button %} 
+                            <button class="btn btn-primary">Edit</button>
+                        {% endif %} 
+                    </section>
+                   
+                    <section id="post-content" class="post-content-display">{{ post.content }}</section>
                     <span class="timestamp-display">{{ post.timestamp }}</span>
                 </div>
             {% endfor %} 
