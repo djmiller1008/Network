@@ -50,6 +50,18 @@ def profile(request, username):
         "following": following
     })
 
+def edit_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    user = post.user
+
+    if request.user == user:
+        edited_post_content = request.POST["post-content"]
+        post.content = edited_post_content
+        post.save()
+
+        return HttpResponseRedirect(reverse("profile", kwargs={"username": user}))
+    
+
 @login_required(login_url='login')
 def following(request):
     posts = []
