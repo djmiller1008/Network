@@ -62,3 +62,10 @@
     display: flex;
     
 }
+
+.like-button {
+    border: none;
+    width: fit-content;
+    background: none;
+    color: blue;
+}
