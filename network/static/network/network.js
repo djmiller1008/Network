@@ -45,4 +45,40 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
     })
-})
+
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(likeButton => {
+        let postId = likeButton.dataset.postid
+        let user = likeButton.dataset.user 
+
+        fetch(`/check_for_like/${postId}`)
+            .then(response => response.text())
+            .then(text => {
+                const result = JSON.parse(text);
+                const buttonText = result[1]
+
+                document.getElementById(`${postId} like-button`).innerHTML = `${buttonText}`;
+            })
+
+        likeButton.addEventListener('click', () => {
+            fetch(`/like/${postId}`, {
+                user: user
+            })
+            .then(response => response.text())
+            .then(text => {
+                const result = JSON.parse(text);
+                const numLikes = result[1];
+
+                document.getElementById(`${postId} like-display`).innerHTML = `${numLikes} Like(s)`;
+                
+                const likeButton = document.getElementById(`${postId} like-button`);
+                if (likeButton.innerHTML === 'Like') {
+                    likeButton.innerHTML = 'Unlike';
+                } else {
+                    likeButton.innerHTML = 'Like';
+                }
+            })
+        })
+    })
+});
