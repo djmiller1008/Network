@@ -1,3 +1,5 @@
+import pkgutil
+from sqlite3 import connect
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,7 +7,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from .models import User, Post, UserFollower
+import json 
+from .models import PostLike, User, Post, UserFollower
 
 
 
@@ -49,6 +52,48 @@ def profile(request, username):
         "posts": posts,
         "following": following
     })
+
+@login_required(login_url='login')
+def like(request, post_id):
+    username = request.user
+    user = User.objects.get(username=username)
+    post = Post.objects.get(pk=post_id)
+    
+    if PostLike.objects.filter(user=user, post=post).count() == 0:
+        new_postlike = PostLike(user=user, post=post)
+        new_postlike.save()
+        
+        post.likes_number = post.likes_number + 1
+        post.save() 
+    else:
+        post_like = PostLike.objects.get(user=user, post=post)
+        post_like.delete()
+
+        post.likes_number = post.likes_number - 1 
+        post.save()
+
+    response = {
+            1: post.likes_number
+        }
+    json_string = json.dumps(response)
+
+    return HttpResponse(json_string, content_type="application/json")
+
+def check_for_like(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    user = User.objects.get(username=request.user) 
+
+    if PostLike.objects.filter(user=user, post=post).count() == 0:
+        like_button_text = 'Like'
+    else: 
+        like_button_text = 'Unlike'
+    
+    response = {
+        1: like_button_text
+    }
+    json_string = json.dumps(response)
+    return HttpResponse(json_string, content_type="application/json")
+
 
 def edit_post(request, post_id):
     post = Post.objects.get(pk=post_id)
