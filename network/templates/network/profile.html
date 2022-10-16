@@ -23,12 +23,16 @@
                 <div class="single-post">
                     <section class="top-layer">
                         <span class="username-display">{{ post.user }}</span>
-                        {% if follow_button %} 
-                            <button class="btn btn-primary">Edit</button>
+                        {% if follow_button == False %} 
+                            <button data-index="{{ forloop.counter}}" class="btn btn-primary edit">Edit</button>
                         {% endif %} 
                     </section>
-                   
-                    <section id="post-content" class="post-content-display">{{ post.content }}</section>
+                    <form class="edit-form" id="{{ forloop.counter }} form" action="{% url 'edit_post' post.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="PATCH">
+                        
+                    </form>
+                    <section id="{{ forloop.counter }} post-content" class="post-content-display">{{ post.content }}</section>
                     <span class="timestamp-display">{{ post.timestamp }}</span>
                 </div>
             {% endfor %} 
