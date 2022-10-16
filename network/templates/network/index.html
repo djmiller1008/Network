@@ -17,6 +17,8 @@
                         <a href="{% url 'profile' post.user %}" class="username-display">{{ post.user }}</a>
                         <section class="post-content-display">{{ post.content }}</section>
                         <span class="timestamp-display">{{ post.timestamp }}</span>
+                        <span id="{{ post.id }} like-display" class="likes-display">{{ post.likes_number }} Like(s)</span>
+                        <button class="btn btn-primary like-button" data-userId="{{ post.user }}" data-postid="{{ post.id }}" id="{{ post.id }} like-button"></button>
                     </div>
                 {% endfor %} 
 
